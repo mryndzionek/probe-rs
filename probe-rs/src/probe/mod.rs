@@ -1,3 +1,4 @@
+pub(crate) mod bmp;
 pub(crate) mod cmsisdap;
 #[cfg(feature = "ftdi")]
 pub(crate) mod ftdi;
@@ -23,6 +24,7 @@ use crate::{
     },
     Memory,
 };
+use bmp::list_bmp_devices;
 use jlink::list_jlink_devices;
 use std::{convert::TryFrom, fmt};
 use thiserror::Error;
@@ -199,6 +201,8 @@ impl Probe {
         list.extend(stlink::tools::list_stlink_devices());
 
         list.extend(list_jlink_devices());
+
+        list.extend(list_bmp_devices());
 
         list
     }
@@ -531,6 +535,7 @@ pub enum DebugProbeType {
     FTDI,
     STLink,
     JLink,
+    BMP,
 }
 
 #[derive(Clone)]
