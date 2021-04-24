@@ -227,7 +227,12 @@ impl Probe {
             Err(DebugProbeError::ProbeCouldNotBeCreated(ProbeCreationError::NotFound)) => {}
             Err(e) => return Err(e),
         };
-        match jlink::JLink::new_from_selector(selector) {
+        match jlink::JLink::new_from_selector(selector.clone()) {
+            Ok(link) => return Ok(Probe::from_specific_probe(link)),
+            Err(DebugProbeError::ProbeCouldNotBeCreated(ProbeCreationError::NotFound)) => {}
+            Err(e) => return Err(e),
+        };
+        match bmp::BMPProbe::new_from_selector(selector) {
             Ok(link) => return Ok(Probe::from_specific_probe(link)),
             Err(DebugProbeError::ProbeCouldNotBeCreated(ProbeCreationError::NotFound)) => {}
             Err(e) => return Err(e),
